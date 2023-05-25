@@ -21,6 +21,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.17.0",
