@@ -1,4 +1,4 @@
-import { randomInt, randomUUID } from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { knex } from '../database'
@@ -16,6 +16,10 @@ export async function userRoutes(app: FastifyInstance) {
     return { users }
   })
 
+  app.delete('/', async (request) => {
+    await knex('users').delete()
+  })
+
   app.post('/register', async (request, reply) => {
     const createNewUserSchema = z.object({
       name: z.string(),
@@ -28,7 +32,7 @@ export async function userRoutes(app: FastifyInstance) {
       request.body,
     )
 
-    const encyptedPassword = await hash(password, randomInt(10, 20))
+    const encyptedPassword = await hash(password, 10)
 
     await knex('users').insert({
       id: randomUUID(),
