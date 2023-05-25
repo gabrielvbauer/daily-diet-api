@@ -19,11 +19,7 @@ export async function authRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'User not found' })
     }
 
-    const isPasswordValid = await Promise.all([
-      bcrypt.compare(password, userInfo.password),
-      bcrypt.compare(password, userInfo.password),
-      bcrypt.compare(password, userInfo.password),
-    ]).then((results) => results.some((result) => result === true))
+    const isPasswordValid = await bcrypt.compare(password, userInfo.password)
 
     if (!isPasswordValid) {
       return reply.status(400).send({ error: 'Incorrect password' })
