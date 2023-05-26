@@ -13,10 +13,12 @@ export async function checkIfUserIsAuthenticated(
     return reply.status(401).send({ error: 'User not authenticated' })
   }
 
-  jwt.verify(token, env.JWT_SECRET, (error) => {
+  jwt.verify(token, env.JWT_SECRET, (error, payload) => {
     if (error) {
       return reply.status(400).send({ error: error.message })
     }
+
+    request.headers.userId = payload?.sub?.toString() as string
 
     done()
   })
