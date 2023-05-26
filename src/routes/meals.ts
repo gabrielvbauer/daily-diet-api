@@ -49,4 +49,29 @@ export async function mealRoutes(app: FastifyInstance) {
 
     return reply.status(204).send()
   })
+
+  app.delete('/:id', async (request, reply) => {
+    const requestParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id: mealId } = requestParamsSchema.parse(request.params)
+
+    if (!mealId) {
+      return reply.status(404).send({ error: 'Id was not specified' })
+    }
+
+    const mealToDelete = await knex('meals')
+      .select()
+      .where('id', mealId)
+      .first()
+
+    if (!mealToDelete) {
+      return reply.status(404).send({ error: 'Meal was not found' })
+    }
+
+    await knex('meals').where('id', mealId).del()
+
+    return reply.status(204).send()
+  })
 }
