@@ -10,7 +10,11 @@ export async function mealRoutes(app: FastifyInstance) {
   })
 
   app.get('/', async (request, reply) => {
-    const meals = await knex('meals').select()
+    const userId = request.headers.userId as string
+
+    const meals = await knex('meals').select().where({
+      user_id: userId,
+    })
 
     return reply.status(200).send({ meals })
   })
