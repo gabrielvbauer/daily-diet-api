@@ -19,6 +19,29 @@ export async function mealRoutes(app: FastifyInstance) {
     return reply.status(200).send({ meals })
   })
 
+  app.get('/:id', async (request, reply) => {
+    const requestParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id: mealId } = requestParamsSchema.parse(request.params)
+
+    if (!mealId) {
+      return reply.status(404).send({ error: 'Id was not specified' })
+    }
+
+    const mealToRetrieve = await knex('meals')
+      .select()
+      .where('id', mealId)
+      .first()
+
+    if (!mealToRetrieve) {
+      return reply.status(404).send({ error: 'Meal was not found' })
+    }
+
+    return reply.status(200).send({ meal: mealToRetrieve })
+  })
+
   app.post('/', async (request, reply) => {
     const createMealBodySchema = z.object({
       name: z.string(),
