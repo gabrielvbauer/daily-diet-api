@@ -73,6 +73,43 @@ export async function mealRoutes(app: FastifyInstance) {
     return reply.status(204).send()
   })
 
+  app.patch('/:id', async (request, reply) => {
+    const requestParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id: mealId } = requestParamsSchema.parse(request.params)
+
+    if (!mealId) {
+      return reply.status(404).send({ error: 'Id was not specified' })
+    }
+
+    const requestBodySchema = z.object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      date: z.string().optional(),
+      inDiet: z.boolean().optional(),
+    })
+
+    const updateBody = requestBodySchema.parse(request.body)
+
+    if (!updateBody) {
+      return reply.status(404).send({ error: 'Missing body' })
+    }
+
+    const updatedMeal = await knex('meals')
+      .where('id', mealId)
+      .update({
+        name: updateBody.name,
+        description: updateBody.description,
+        created_at: updateBody.date,
+        in_diet: updateBody.inDiet,
+      })
+      .returning('*')
+
+    reply.status(200).send({ meal: updatedMeal[0] })
+  })
+
   app.delete('/:id', async (request, reply) => {
     const requestParamsSchema = z.object({
       id: z.string().uuid(),
