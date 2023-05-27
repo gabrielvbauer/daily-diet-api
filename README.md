@@ -19,7 +19,7 @@
     - Quantidade total de refeições dentro da dieta
     - Quantidade total de refeições fora da dieta
     - Melhor sequência por dia de refeições dentro da dieta
-- [ ] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+- [x] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
 
 ### Contexto da aplicação
 [Daily Diet APP](https://www.figma.com/file/XXEGagbSPUSIMOV2ZaF140/Daily-Diet-(Community)?type=design&t=XWE6WQ7taXMcV4sD-0)

@@ -39,6 +39,16 @@ export async function mealRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'Meal was not found' })
     }
 
+    const userId = request.headers.userId as string
+    const mealBelongsToUser = checkIfMealBelongsToUser(
+      userId,
+      mealToRetrieve.user_id,
+    )
+
+    if (!mealBelongsToUser) {
+      return reply.status(403).send({ error: 'Meal is not from the user' })
+    }
+
     return reply.status(200).send({ meal: mealToRetrieve })
   })
 
@@ -82,6 +92,25 @@ export async function mealRoutes(app: FastifyInstance) {
 
     if (!mealId) {
       return reply.status(404).send({ error: 'Id was not specified' })
+    }
+
+    const mealToUpdate = await knex('meals')
+      .select('*')
+      .where('id', mealId)
+      .first()
+
+    if (!mealToUpdate) {
+      return reply.status(404).send({ error: 'Meal not found' })
+    }
+
+    const userId = request.headers.userId as string
+    const mealBelongsToUser = checkIfMealBelongsToUser(
+      userId,
+      mealToUpdate.user_id,
+    )
+
+    if (!mealBelongsToUser) {
+      return reply.status(403).send({ error: 'Meal is not from the user' })
     }
 
     const requestBodySchema = z.object({
@@ -130,8 +159,22 @@ export async function mealRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'Meal was not found' })
     }
 
+    const userId = request.headers.userId as string
+    const mealBelongsToUser = checkIfMealBelongsToUser(
+      userId,
+      mealToDelete.user_id,
+    )
+
+    if (!mealBelongsToUser) {
+      return reply.status(403).send({ error: 'Meal is not from the user' })
+    }
+
     await knex('meals').where('id', mealId).del()
 
     return reply.status(204).send()
   })
+
+  function checkIfMealBelongsToUser(userId: string, mealUserId: string) {
+    return userId === mealUserId
+  }
 }
