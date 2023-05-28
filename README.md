@@ -84,6 +84,7 @@ A API possui os seguintes endpoints:
   - `POST /users/register` - Criar um novo usuário
   - `GET /users/metrics` - Obter informações do usuário atual
 
+- Endpoints de autenticação
   - `POST /auth/login` - Login do usuário (autenticação)
   - `POST /auth/refresh-token` - Atualização do token de acesso
 
