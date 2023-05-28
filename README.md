@@ -81,9 +81,11 @@ A API estará disponível no seguinte endereço: ``http://localhost:3333.``
 A API possui os seguintes endpoints:
 
 - Endpoints de Usuário:
-  - `POST /users` - Criar um novo usuário
-  - `POST /users/login` - Login do usuário (autenticação)
+  - `POST /users/register` - Criar um novo usuário
   - `GET /users/metrics` - Obter informações do usuário atual
+
+  - `POST /auth/login` - Login do usuário (autenticação)
+  - `POST /auth/refresh-token` - Atualização do token de acesso
 
 - Endpoints de Refeição:
   - `POST /meals` - Criar uma nova refeição
@@ -101,6 +103,7 @@ A Daily Diet API utiliza as seguintes tecnologias:
 - Fastify
 - Knex
 - Zod
+- JsonWebToken
 
 Essas tecnologias foram escolhidas para fornecer uma base sólida para o desenvolvimento da API, permitindo a construção de uma aplicação eficiente e segura.
 
